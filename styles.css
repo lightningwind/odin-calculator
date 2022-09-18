@@ -4,7 +4,7 @@ html {
     font-family: monospace;
 }
 
-#calc {
+main#container {
     display: flex;
     justify-content: center;
     align-content: center;
@@ -15,9 +15,9 @@ html {
     background-color: azure;
 }
 
-#container {
+#calc {
     background-color: black;
-    border: 10px solid rgba(47,47,47,1);
+    border: 10px solid rgb(47,47,47);
     border-radius: 4px;
     display: grid;
     grid-template-columns: repeat(4, 100px);
@@ -37,4 +37,14 @@ html {
     font-size: 5.5em;
     font-weight: initial;
     text-shadow: 1.3px 1.3px #383838;
+}
+
+button {
+    color: black;
+    margin: 1px;
+    border: none;
+    border-radius: 5%;
+    font-weight: initial;
+    font-size: 2em;
+    font-family: monospace;
 }
