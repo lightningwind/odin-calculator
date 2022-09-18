@@ -48,3 +48,56 @@ button {
     font-size: 2em;
     font-family: monospace;
 }
+
+#zero {
+    grid-column: span 2;
+}
+
+.operator {
+    background-color: #ff8f1f;
+}
+
+.operator:focus {
+    background-color: #ffc183;
+}
+
+.equals {
+    background-color: #ff8f1f;
+}
+
+.equals:active {
+    background-color: #ffc183;
+}
+
+.operand {
+    background-color: #217c7e;
+}
+
+.operand:active {
+    background-color: #33b9bb;
+}
+
+.decimal {
+    background-color: #217c7e;
+}
+
+.decimal:active {
+    background-color: #33b9bb;
+}
+
+.clear {
+    background-color: dodgerblue;
+}
+
+.clear:active {
+    background-color: rgb(123, 189, 255);
+}
+
+.sign {
+    background-color: dodgerblue;
+    grid-column: span 2;
+}
+
+.sign:active {
+    background-color: rgb(123, 189, 255);
+}
