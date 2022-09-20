@@ -15,7 +15,11 @@ function updateDisplay() {
 
 function handleNumberBtnClick(e) {
     const num = e.target.value;
-    displayValue = num;
+    if (displayValue === '0') {
+        displayValue = num;
+    } else {
+        displayValue += num;
+    }
     updateDisplay();
 }
 
