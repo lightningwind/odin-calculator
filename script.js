@@ -45,6 +45,11 @@ function handleEqualsBtnClick() {
             prevNum *= curNum;
             break;
         case '/':
+            if (curNum === 0) {
+                // TODO: Reset values 
+                updateDisplay('ERROR');
+                return; 
+            }
             prevNum /= curNum;
             break; 
         default:
