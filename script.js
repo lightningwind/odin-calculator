@@ -4,7 +4,7 @@ let prevNum = '';
 let operator = ''; 
 
 /* === DOM Elements === */
-const displayEle = document.getElementById("display");
+const displayEle = document.querySelector("#display");
 const numberButtons = document.querySelectorAll('.operand');
 const operatorButtons = document.querySelectorAll('.operator');
 const equalsBtn = document.querySelector('.equals');
@@ -12,59 +12,51 @@ const clearBtn = document.querySelector('.clear');
 const decimalBtn = document.querySelector('.decimal');
 
 /* === Functions === */
-function updateDisplay() {
-    displayEle.innerText = curNum; 
+function updateDisplay(value) {
+    displayEle.textContent = value; 
 }
 
 function handleNumberBtnClick(num) { 
     if (curNum.length < 9) { // Prevent overflow of display
         curNum += num; 
     }
-    updateDisplay(); 
+    updateDisplay(curNum); 
 }
 
 function handleOperatorBtnClick(op) {
     operator = op; 
-    prevNum = curNum;
+    prevNum = curNum; // Store first operand in a variable
     curNum = ''; 
-    updateDisplay();
+    updateDisplay(curNum);
 }
 
-function add(a, b) {
-    return a + b;
-}
+function handleEqualsBtnClick() {
+    prevNum = +prevNum;
+    curNum = +curNum;
 
-function subtract(a, b) {
-    return a - b;
-}
-
-function multiply(a, b) {
-    return a * b;
-}
-
-function divide(a, b) {
-    if (b === 0) {
-        console.error("Cannot divide by zero");
-        return;
-    }
-    return a / b;
-}
-
-function operate(operator, a, b) {
     switch(operator) {
         case '+':
-            return add(a, b);
+            prevNum += curNum;
+            break;
         case '-':
-            return subtract(a, b);
+            prevNum -= curNum;
+            break;
         case '*':
-            return multiply(a, b);
+            prevNum *= curNum;
+            break;
         case '/':
-            return divide(a, b); 
+            prevNum /= curNum;
+            break; 
         default:
-            console.error("Invalid operator");
+            updateDisplay("ERROR");
     }
+    prevNum = prevNum.toString(); 
+    curNum = ''; 
+    operator = ''; 
+    updateDisplay(prevNum);
 }
 
 /* === Event listeners === */
 numberButtons.forEach(btn => btn.addEventListener('click', e => handleNumberBtnClick(e.target.value)));
 operatorButtons.forEach(btn => btn.addEventListener('click', e => handleOperatorBtnClick(e.target.value)));
+equalsBtn.addEventListener('click', handleEqualsBtnClick)
