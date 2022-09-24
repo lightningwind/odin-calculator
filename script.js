@@ -57,6 +57,13 @@ function operate() {
         default:
             prevNum = "ERROR";
     }
+    if (prevNum !== "ERROR") {
+        prevNum = roundNum(prevNum);
+    }
+}
+
+function roundNum(num) { // Rounds to 5 decimal places
+    return Math.round(num * 100000) / 100000; 
 }
 
 /* === Event listeners === */
