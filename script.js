@@ -13,7 +13,7 @@ const decimalBtn = document.querySelector('.decimal');
 
 /* === Functions === */
 function updateDisplay(value) {
-    displayEle.textContent = value; 
+    displayEle.textContent = value.length < 10 ? value : value.slice(0, 9); 
 }
 
 function handleNumberBtnClick(num) { 
@@ -33,7 +33,14 @@ function handleOperatorBtnClick(op) {
 function handleEqualsBtnClick() {
     prevNum = +prevNum;
     curNum = +curNum;
+    operate();
+    prevNum = prevNum.toString(); 
+    curNum = ''; 
+    operator = ''; 
+    updateDisplay(prevNum);
+}
 
+function operate() {
     switch(operator) {
         case '+':
             prevNum += curNum;
@@ -45,20 +52,11 @@ function handleEqualsBtnClick() {
             prevNum *= curNum;
             break;
         case '/':
-            if (curNum === 0) {
-                // TODO: Reset values 
-                updateDisplay('ERROR');
-                return; 
-            }
-            prevNum /= curNum;
+            prevNum = curNum === 0 ? "ERROR" : prevNum / curNum; 
             break; 
         default:
-            updateDisplay("ERROR");
+            prevNum = "ERROR";
     }
-    prevNum = prevNum.toString(); 
-    curNum = ''; 
-    operator = ''; 
-    updateDisplay(prevNum);
 }
 
 /* === Event listeners === */
