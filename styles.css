@@ -4,16 +4,17 @@ html {
     font-family: monospace;
 }
 
+
 main#container {
     display: flex;
     justify-content: center;
-    align-content: center;
     align-items: center;
     min-height: 95vh;
     height: 100vh;
     overflow: hidden;
     background-color: azure;
 }
+
 
 #calc {
     background-color: black;

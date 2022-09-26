@@ -17,15 +17,16 @@ function updateDisplay(value) {
 }
 
 function handleNumberBtnClick(num) { 
-    if (curNum.length < 9) { // Prevent overflow of display
+    if (curNum.length < 9) {
         curNum += num; 
     }
     updateDisplay(curNum); 
 }
 
-function handleOperatorBtnClick(op) {
+function handleOperatorBtnClick(op) { // TODO: Handle multiple operations 
     operator = op; 
-    prevNum = curNum; // Store first operand in a variable
+    prevNum = curNum; // Save first operand in a variable
+    // Clear display for second operand 
     curNum = ''; 
     updateDisplay(curNum);
 }
@@ -33,11 +34,16 @@ function handleOperatorBtnClick(op) {
 function handleEqualsBtnClick() {
     prevNum = +prevNum;
     curNum = +curNum;
-    operate();
-    prevNum = prevNum.toString(); 
-    curNum = ''; 
+    if (operate()) {
+        updateDisplay("ERROR");
+        prevNum = '';
+        curNum = ''; 
+    } else {
+        curNum = prevNum.toString(); 
+        prevNum = '';
+        updateDisplay(curNum);
+    }
     operator = ''; 
-    updateDisplay(prevNum);
 }
 
 function operate() {
@@ -52,17 +58,19 @@ function operate() {
             prevNum *= curNum;
             break;
         case '/':
-            prevNum = curNum === 0 ? "ERROR" : prevNum / curNum; 
+            if (curNum === 0) {
+                return 1; 
+            }
+            prevNum /= curNum; 
             break; 
         default:
-            prevNum = "ERROR";
+            return 1; 
     }
-    if (prevNum !== "ERROR") {
-        prevNum = roundNum(prevNum);
-    }
+    prevNum = roundNum(prevNum);
+    return 0;
 }
 
-function roundNum(num) { // Rounds to 5 decimal places
+function roundNum(num) { // Rounds number <num> to 5 decimal places
     return Math.round(num * 100000) / 100000; 
 }
 
