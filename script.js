@@ -56,6 +56,11 @@ function handleSignBtnClick() {
     updateDisplay(curNum);
 }
 
+function addDecimal() {
+    curNum += '.';
+    updateDisplay(curNum);
+}
+
 /* === Utility functions === */
 
 function operate() {
@@ -104,5 +109,10 @@ clearBtn.addEventListener('click', () => resetCalculator('0'));
 signBtn.addEventListener('click', () => {
     if (curNum != '') {
         handleSignBtnClick();
+    }
+})
+decimalBtn.addEventListener('click', () => {
+    if (!curNum.includes('.')) {
+        addDecimal();
     }
 })
