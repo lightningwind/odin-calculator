@@ -24,6 +24,9 @@ function handleNumber(num) {
 }
 
 function handleOperator(op) { 
+    if (prevNum === '' && curNum === '') {
+        return;
+    }
     if (prevNum != '' && curNum != '') {
         calculate(); 
     } 
