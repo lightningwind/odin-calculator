@@ -10,11 +10,11 @@ const operatorButtons = document.querySelectorAll('.operator');
 const equalsBtn = document.querySelector('.equals');
 const clearBtn = document.querySelector('.clear');
 const decimalBtn = document.querySelector('.decimal');
+const signBtn = document.querySelector('.sign');
 
 /* === Functions === */
-function updateDisplay(value) {
-    displayEle.textContent = value.length < 10 ? value : value.slice(0, 9); 
-}
+
+/* === Event Handlers === */
 
 function handleNumberBtnClick(num) { 
     if (curNum.length < 9) {
@@ -23,7 +23,7 @@ function handleNumberBtnClick(num) {
     updateDisplay(curNum); 
 }
 
-function handleOperatorBtnClick(op) { // TODO: Handle multiple operations 
+function handleOperatorBtnClick(op) { 
     operator = op; 
     prevNum = curNum; // Save first operand in a variable
     // Clear display for second operand 
@@ -31,42 +31,56 @@ function handleOperatorBtnClick(op) { // TODO: Handle multiple operations
     updateDisplay(curNum);
 }
 
-function handleEqualsBtnClick() {
+function handleEqualsBtnClick() { 
     prevNum = +prevNum;
     curNum = +curNum;
     if (operate()) {
-        updateDisplay("ERROR");
-        prevNum = '';
-        curNum = ''; 
+        resetCalculator("ERROR");
     } else {
-        curNum = prevNum.toString(); 
-        prevNum = '';
         updateDisplay(curNum);
+        prevNum = '';
+        operator = ''; 
     }
-    operator = ''; 
 }
 
+function resetCalculator(displayValue) {
+    prevNum = '';
+    curNum = '';
+    operator = '';
+    updateDisplay(displayValue);
+}
+
+function handleSignBtnClick() {
+    curNum = -curNum;
+    curNum = curNum.toString();
+    updateDisplay(curNum);
+}
+
+/* === Utility functions === */
+
 function operate() {
+    let res; 
     switch(operator) {
         case '+':
-            prevNum += curNum;
+            res = prevNum + curNum;
             break;
         case '-':
-            prevNum -= curNum;
+            res = prevNum - curNum;
             break;
         case '*':
-            prevNum *= curNum;
+            res = prevNum * curNum;
             break;
         case '/':
             if (curNum === 0) {
-                return 1; 
+                return 1; // Signal an error
             }
-            prevNum /= curNum; 
+            res = prevNum / curNum; 
             break; 
         default:
             return 1; 
     }
-    prevNum = roundNum(prevNum);
+    res = roundNum(res);
+    curNum = res.toString();
     return 0;
 }
 
@@ -74,7 +88,21 @@ function roundNum(num) { // Rounds number <num> to 5 decimal places
     return Math.round(num * 100000) / 100000; 
 }
 
+function updateDisplay(value) {
+    displayEle.textContent = value.length < 10 ? value : value.slice(0, 9); 
+}
+
 /* === Event listeners === */
 numberButtons.forEach(btn => btn.addEventListener('click', e => handleNumberBtnClick(e.target.value)));
 operatorButtons.forEach(btn => btn.addEventListener('click', e => handleOperatorBtnClick(e.target.value)));
-equalsBtn.addEventListener('click', handleEqualsBtnClick)
+equalsBtn.addEventListener('click', () => {
+    if (prevNum.length != 0 && curNum.length != 0 && operator.length != 0) {
+        handleEqualsBtnClick();
+    }
+});
+clearBtn.addEventListener('click', () => resetCalculator('0')); 
+signBtn.addEventListener('click', () => {
+    if (curNum != '') {
+        handleSignBtnClick();
+    }
+})
