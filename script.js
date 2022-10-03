@@ -16,22 +16,27 @@ const signBtn = document.querySelector('.sign');
 
 /* === Event Handlers === */
 
-function handleNumberBtnClick(num) { 
+function handleNumber(num) { 
     if (curNum.length < 9) {
         curNum += num; 
     }
     updateDisplay(curNum); 
 }
 
-function handleOperatorBtnClick(op) { 
-    operator = op; 
-    prevNum = curNum; // Save first operand in a variable
-    // Clear display for second operand 
-    curNum = ''; 
+function handleOperator(op) { 
+    if (prevNum != '' && curNum != '') {
+        calculate(); 
+    } 
+    prevNum = curNum; // Save first operand in a variable 
+    curNum = ''; // Clear display for second operand
     updateDisplay(curNum);
+    operator = op; 
 }
 
-function handleEqualsBtnClick() { 
+function calculate() { 
+    if (prevNum.length === 0 || curNum.length === 0 || operator.length === 0) {
+        return;
+    }
     prevNum = +prevNum;
     curNum = +curNum;
     if (operate()) {
@@ -50,15 +55,40 @@ function resetCalculator(displayValue) {
     updateDisplay(displayValue);
 }
 
-function handleSignBtnClick() {
+function handleSign() {
     curNum = -curNum;
     curNum = curNum.toString();
     updateDisplay(curNum);
 }
 
 function addDecimal() {
-    curNum += '.';
-    updateDisplay(curNum);
+    if (!curNum.includes('.')) {
+        curNum += '.';
+        updateDisplay(curNum);
+    }
+}
+
+function handleKeyPress(e) {
+    if (0 <= e.key && e.key <= 9) {
+        handleNumber(e.key);
+    }
+    switch (e.key) {
+        case '+':
+        case '-':
+        case '/':
+        case '*':
+            handleOperator(e.key);
+            break;
+        case '.':
+            addDecimal();
+            break;
+        case '=':
+        case 'Enter':
+            calculate();
+            break;
+        case 'Backspace':
+            resetCalculator('0');
+    }
 }
 
 /* === Utility functions === */
@@ -98,21 +128,14 @@ function updateDisplay(value) {
 }
 
 /* === Event listeners === */
-numberButtons.forEach(btn => btn.addEventListener('click', e => handleNumberBtnClick(e.target.value)));
-operatorButtons.forEach(btn => btn.addEventListener('click', e => handleOperatorBtnClick(e.target.value)));
-equalsBtn.addEventListener('click', () => {
-    if (prevNum.length != 0 && curNum.length != 0 && operator.length != 0) {
-        handleEqualsBtnClick();
-    }
-});
+window.addEventListener('keydown', handleKeyPress);
+numberButtons.forEach(btn => btn.addEventListener('click', e => handleNumber(e.target.value)));
+operatorButtons.forEach(btn => btn.addEventListener('click', e => handleOperator(e.target.value)));
+equalsBtn.addEventListener('click', calculate);
 clearBtn.addEventListener('click', () => resetCalculator('0')); 
 signBtn.addEventListener('click', () => {
     if (curNum != '') {
-        handleSignBtnClick();
+        handleSign();
     }
 })
-decimalBtn.addEventListener('click', () => {
-    if (!curNum.includes('.')) {
-        addDecimal();
-    }
-})
+decimalBtn.addEventListener('click', addDecimal); 
